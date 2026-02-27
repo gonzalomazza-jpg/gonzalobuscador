@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Motor de búsqueda interno inteligente para circulante.es.tl — Encuentra información sobre procedimientos quirúrgicos, instrumentación y enfermería.">
+  <title>Circulante Search — Buscador Inteligente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <!-- Animated background -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow--1"></div>
+  <div class="bg-glow bg-glow--2"></div>
+  <div class="bg-glow bg-glow--3"></div>
+
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo__icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" stroke="url(#grad1)" stroke-width="2.5" />
+            <path d="M14 20C14 16.686 16.686 14 20 14C23.314 14 26 16.686 26 20C26 23.314 23.314 26 20 26"
+              stroke="url(#grad1)" stroke-width="2.5" stroke-linecap="round" />
+            <circle cx="20" cy="20" r="3" fill="url(#grad1)" />
+            <defs>
+              <linearGradient id="grad1" x1="0" y1="0" x2="40" y2="40">
+                <stop offset="0%" stop-color="#06d6a0" />
+                <stop offset="100%" stop-color="#118ab2" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo__text">
+          <h1>Circulante <span class="logo__accent">Search</span></h1>
+          <p class="logo__subtitle">Buscador inteligente de procedimientos quirúrgicos by Gonzalo Mazza</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search Section -->
+    <main class="main">
+      <section class="search-section">
+        <div class="search-box" id="searchBox">
+          <div class="search-box__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </div>
+          <input type="text" id="searchInput" class="search-box__input"
+            placeholder="Buscar procedimientos, instrumentos, técnicas..." autocomplete="off" maxlength="200">
+          <button id="searchBtn" class="search-box__btn" aria-label="Buscar">
+            <span class="search-box__btn-text">Buscar</span>
+            <svg class="search-box__btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Quick suggestion chips -->
+        <div class="suggestions" id="suggestions">
+          <span class="suggestions__label">Sugerencias:</span>
+          <button class="chip" data-query="cesárea">Cesárea</button>
+          <button class="chip" data-query="hernia">Hernia</button>
+          <button class="chip" data-query="anestesia">Anestesia</button>
+          <button class="chip" data-query="trauma">Trauma</button>
+          <button class="chip" data-query="laparoscopia">Laparoscopia</button>
+          <button class="chip" data-query="columna">Columna</button>
+          <button class="chip" data-query="catéter">Catéter</button>
+        </div>
+      </section>
+
+      <!-- Status bar -->
+      <div class="status-bar" id="statusBar">
+        <div class="status-bar__content" id="statusContent"></div>
+      </div>
+
+      <!-- Results Section -->
+      <section class="results-section" id="resultsSection">
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state__icon">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+              stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </div>
+          <h2 class="empty-state__title">Explorá el contenido de Circulante</h2>
+          <p class="empty-state__text">Ingresá una palabra o frase para buscar en todas las secciones del sitio. El
+            motor analiza títulos, contenidos y términos relacionados.</p>
+        </div>
+
+        <!-- Loading state -->
+        <div class="loading-state" id="loadingState" style="display:none;">
+          <div class="loader">
+            <div class="loader__ring"></div>
+            <div class="loader__ring"></div>
+            <div class="loader__ring"></div>
+          </div>
+          <p class="loading-state__text" id="loadingText">Buscando coincidencias...</p>
+        </div>
+
+        <!-- Error state -->
+        <div class="error-state" id="errorState" style="display:none;">
+          <div class="error-state__icon">⚠️</div>
+          <h3 class="error-state__title">Error en la búsqueda</h3>
+          <p class="error-state__text" id="errorText"></p>
+          <button class="btn-retry" id="retryBtn">Reintentar</button>
+        </div>
+
+        <!-- No results state -->
+        <div class="no-results-state" id="noResultsState" style="display:none;">
+          <div class="no-results-state__icon">🔍</div>
+          <h3 class="no-results-state__title">Sin resultados</h3>
+          <p class="no-results-state__text">No se encontraron coincidencias para "<span id="noResultsQuery"></span>".
+            Intentá con otros términos o sinónimos.</p>
+        </div>
+
+        <!-- Results list -->
+        <div class="results-list" id="resultsList" style="display:none;"></div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Motor de búsqueda sobre <a href="https://circulante.es.tl/" target="_blank"
+          rel="noopener noreferrer">circulante.es.tl</a> — Los resultados enlazan a contenido original del sitio.</p>
+    </footer>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>
