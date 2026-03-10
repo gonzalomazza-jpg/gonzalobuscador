@@ -4,7 +4,7 @@
 > **Autor**: Gonzalo Mazza · **Versión**: 1.0.0
 
 ---
-
+ 
 ## 1. Descripción General
 
 **Circulante Search** es una aplicación web full-stack que funciona como un **buscador inteligente** sobre el contenido del sitio [circulante.es.tl](https://circulante.es.tl), un portal dedicado a procedimientos quirúrgicos, instrumentación y enfermería quirúrgica.
