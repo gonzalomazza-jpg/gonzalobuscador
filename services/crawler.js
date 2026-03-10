@@ -8,10 +8,11 @@ const fetch = require('node-fetch');
 const { crawlCache } = require('./cache');
 
 const BASE_URL = 'https://circulante.es.tl';
-const CONCURRENCY = 2;
-const TIMEOUT_MS = 15000;
-const MAX_RETRIES = 2;
-const CRAWL_DELAY_MS = 500;
+const IS_SERVERLESS = !!process.env.VERCEL;
+const CONCURRENCY = IS_SERVERLESS ? 5 : 2;
+const TIMEOUT_MS = IS_SERVERLESS ? 8000 : 15000;
+const MAX_RETRIES = IS_SERVERLESS ? 1 : 2;
+const CRAWL_DELAY_MS = IS_SERVERLESS ? 200 : 500;
 
 // In-memory page index
 let pageIndex = [];

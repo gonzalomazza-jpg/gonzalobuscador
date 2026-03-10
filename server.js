@@ -33,19 +33,21 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Error interno del servidor.' });
 });
 
-// Start server
-app.listen(PORT, async () => {
-    console.log(`\n🔍 Circulante Search Engine running on http://localhost:${PORT}\n`);
+// Start server (only when running locally, not on Vercel)
+if (!process.env.VERCEL) {
+    app.listen(PORT, async () => {
+        console.log(`\n🔍 Circulante Search Engine running on http://localhost:${PORT}\n`);
 
-    // Initial crawl on startup
-    try {
-        console.log('[Server] Initiating initial site crawl...');
-        await crawlSite();
-        console.log('[Server] Initial crawl complete. Ready for searches.\n');
-    } catch (err) {
-        console.error('[Server] Initial crawl failed:', err.message);
-        console.log('[Server] Will attempt crawl on first search request.\n');
-    }
-});
+        // Initial crawl on startup
+        try {
+            console.log('[Server] Initiating initial site crawl...');
+            await crawlSite();
+            console.log('[Server] Initial crawl complete. Ready for searches.\n');
+        } catch (err) {
+            console.error('[Server] Initial crawl failed:', err.message);
+            console.log('[Server] Will attempt crawl on first search request.\n');
+        }
+    });
+}
 
 module.exports = app;
