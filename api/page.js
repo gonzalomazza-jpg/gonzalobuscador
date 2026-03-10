@@ -1,5 +1,4 @@
-const { getPageByUrl } = require('../services/crawler');
-const { crawlSinglePage } = require('../services/crawler');
+const { getPageByUrl, crawlSinglePage } = require('../services/crawler');
 
 module.exports = async (req, res) => {
 

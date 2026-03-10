@@ -342,10 +342,32 @@ function getCrawlStatus() {
 }
 
 /**
+ * Crawlea una única página por URL (on-demand)
+ */
+async function crawlSinglePage(url) {
+    try {
+        const html = await fetchWithRetry(url);
+        if (!html) return null;
+
+        const page = parsePage(html, url);
+        if (page.content.length > 20) {
+            // Add to index so future lookups are instant
+            pageIndex.push(page);
+            crawlCache.set(url, page);
+            return page;
+        }
+        return null;
+    } catch (err) {
+        console.error(`[Crawler] crawlSinglePage failed for ${url}:`, err.message);
+        return null;
+    }
+}
+
+/**
  * Busca una página específica en el índice por su URL
  */
 function getPageByUrl(url) {
     return pageIndex.find(p => p.url === url) || null;
 }
 
-module.exports = { crawlSite, getIndex, getCrawlStatus, categorizeUrl, getPageByUrl };
+module.exports = { crawlSite, getIndex, getCrawlStatus, categorizeUrl, getPageByUrl, crawlSinglePage };
