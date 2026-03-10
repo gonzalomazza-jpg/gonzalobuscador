@@ -1,8 +1,4 @@
-/**
- * Vercel Serverless Entry Point
- * Re-exports the Express app for Vercel's serverless runtime.
- */
+const serverless = require("serverless-http");
+const app = require("../server");
 
-const app = require('../server');
-
-module.exports = app;
+module.exports = serverless(app);
