@@ -1,6 +1,7 @@
 const { getPageByUrl } = require('../services/crawler');
+const { crawlSinglePage } = require('../services/crawler');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
 
     const url = req.query.url;
 
@@ -10,11 +11,16 @@ module.exports = (req, res) => {
         });
     }
 
-    const page = getPageByUrl(url);
+    let page = getPageByUrl(url);
+
+    // Si no está en memoria, la scrapeamos
+    if (!page) {
+        page = await crawlSinglePage(url);
+    }
 
     if (!page) {
         return res.status(404).json({
-            error: 'Página no encontrada'
+            error: 'No se pudo obtener la página'
         });
     }
 
