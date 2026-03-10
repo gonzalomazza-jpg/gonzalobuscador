@@ -39,6 +39,13 @@ router.get('/search', rateLimiter, async (req, res) => {
         }
 
         const limit = Math.min(parseInt(req.query.limit) || 50, 100);
+
+        const status = getCrawlStatus();
+
+        if (!status.pages || status.pages === 0) {
+            await crawlSite();
+        }
+
         const results = await search(trimmed, { limit });
 
         res.json({
